@@ -39,7 +39,7 @@ contract Blacklist is Creation {
      * Whether the 'account' is blacklisted
      */
     function blacklisted(address account) public view returns (bool) {
-        if(_blacklistmap[account] == 0) {
+        if (_blacklistmap[account] == 0) {
             return false;
         }
         uint index = _blacklistmap[account] - 1;
