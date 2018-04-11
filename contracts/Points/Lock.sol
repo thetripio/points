@@ -6,6 +6,7 @@ contract Lock {
         uint prev;
         uint tokens;
         uint time;
+        uint locktime;
     }
     struct LinkedList {
         uint id;
@@ -15,53 +16,64 @@ contract Lock {
     }
     
     mapping (address=>LinkedList) private lockedlist;
-    uint private lockingTime;
 
     function Lock() public {
-        lockingTime = 30 days;
+
     }
 
-    function pushLockedTokens(address to, uint tokens) internal {
-        require(tokens > 0);
-        if (lockedlist[to].id == 0) {
-            lockedlist[to] = LinkedList(1, 1, 1);
-            lockedlist[to].nodes[1] = Node(0, 0, tokens, now);
+    /**
+     * Record the locked 'tokens' of '_contract'
+     */
+    function pushLockedTokens(address _contract, uint _tokens, uint _seconds) internal {
+        require(_tokens > 0);
+        if (lockedlist[_contract].id == 0) {
+            lockedlist[_contract] = LinkedList(1, 1, 1);
+            lockedlist[_contract].nodes[1] = Node(0, 0, _tokens, now, _seconds);
         }else {
-            uint prev = lockedlist[to].tail;
-            lockedlist[to].id++;
-            uint id = lockedlist[to].id;
+            uint prev = lockedlist[_contract].tail;
+            lockedlist[_contract].id++;
+            uint id = lockedlist[_contract].id;
 
-            lockedlist[to].nodes[id] = Node(0, prev, tokens, now);
-            lockedlist[to].nodes[prev].next = id;
-            lockedlist[to].tail = id;
+            lockedlist[_contract].nodes[id] = Node(0, prev, _tokens, now, _seconds);
+            lockedlist[_contract].nodes[prev].next = id;
+            lockedlist[_contract].tail = id;
         }
     }
 
-    function removeLockedNode(address to, uint id) private {
-        require(lockedlist[to].nodes[id].time > 0);
+    /**
+     * Remove nodes of the 'lockedlist' before the 'id' node and the 'id' node itself
+     */
+    function removeLockedNode(address _contract, uint _id) private {
+        require(lockedlist[_contract].nodes[_id].time > 0);
         uint next = 0;
-        if(lockedlist[to].nodes[id].next == 0) {
-            delete lockedlist[to];
+        if(lockedlist[_contract].nodes[_id].next == 0) {
+            delete lockedlist[_contract];
         }else {
-            next = lockedlist[to].nodes[id].next;
-            lockedlist[to].nodes[next].prev = 0;
-            lockedlist[to].head = next;
+            next = lockedlist[_contract].nodes[_id].next;
+            lockedlist[_contract].nodes[next].prev = 0;
+            lockedlist[_contract].head = next;
         }
     }
 
-    function removeLockedNodeBefore(address to, uint id) private {
-        require(lockedlist[to].nodes[id].time > 0);
-        lockedlist[to].head = id;
-        lockedlist[to].nodes[id].prev = 0;
+    /**
+     * Remove nodes of the 'lockedlist' before the 'id' node
+     */
+    function removeLockedNodeBefore(address _contract, uint _id) private {
+        require(lockedlist[_contract].nodes[_id].time > 0);
+        lockedlist[_contract].head = _id;
+        lockedlist[_contract].nodes[_id].prev = 0;
     }
 
-    function totalUnlockedTokens(address to) public view returns(uint total) {
-        if(lockedlist[to].id > 0) {
-            uint p = lockedlist[to].head;
+    /**
+     * Get the number of unlocked tokens
+     */
+    function totalUnlockedTokens(address _contract) public view returns(uint total) {
+        if(lockedlist[_contract].id > 0) {
+            uint p = lockedlist[_contract].head;
             while(p > 0) {
-                if(lockedlist[to].nodes[p].time + lockingTime < now) {
-                    total += lockedlist[to].nodes[p].tokens;
-                    p = lockedlist[to].nodes[p].next;
+                if(lockedlist[_contract].nodes[p].time + lockedlist[_contract].nodes[p].locktime < now) {
+                    total += lockedlist[_contract].nodes[p].tokens;
+                    p = lockedlist[_contract].nodes[p].next;
                 }else {
                     break;
                 }
@@ -71,22 +83,25 @@ contract Lock {
         return 0;
     }
 
-    function unlockTokens(address to, uint tokens) internal returns(bool) {
-        require(lockedlist[to].id > 0 && tokens > 0);
-        uint p = lockedlist[to].head;
+    /**
+     * Unlock '_tokens' of '_contract', while the '_tokens' is over lock time
+     */
+    function unlockTokens(address _contract, uint _tokens) internal returns(bool) {
+        require(lockedlist[_contract].id > 0 && _tokens > 0);
+        uint p = lockedlist[_contract].head;
         uint total = 0;
         while(p > 0) {
-            if(lockedlist[to].nodes[p].time + lockingTime < now) {
-                total += lockedlist[to].nodes[p].tokens;
-                if (total > tokens) {
-                    removeLockedNodeBefore(to, p);
-                    lockedlist[to].nodes[p].tokens = (total - tokens);
+            if(lockedlist[_contract].nodes[p].time + lockedlist[_contract].nodes[p].locktime < now) {
+                total += lockedlist[_contract].nodes[p].tokens;
+                if (total > _tokens) {
+                    removeLockedNodeBefore(_contract, p);
+                    lockedlist[_contract].nodes[p].tokens = (total - _tokens);
                     return true;
-                } else if(total == tokens) {
-                    removeLockedNode(to, p);
+                } else if(total == _tokens) {
+                    removeLockedNode(_contract, p);
                     return true;
                 }
-                p = lockedlist[to].nodes[p].next;
+                p = lockedlist[_contract].nodes[p].next;
             }else {
                 break;
             }
@@ -94,21 +109,24 @@ contract Lock {
         return false;
     }
 
-    function unlockTokensAnyway(address to, uint tokens) internal returns(bool) {
-        require(lockedlist[to].id > 0 && tokens > 0);
-        uint p = lockedlist[to].head;
+    /**
+     * Unlock '_tokens' of '_contract' anyway
+     */
+    function unlockTokensAnyway(address _contract, uint _tokens) internal returns(bool) {
+        require(lockedlist[_contract].id > 0 && _tokens > 0);
+        uint p = lockedlist[_contract].head;
         uint total = 0;
         while(p > 0) {
-            total += lockedlist[to].nodes[p].tokens;
-            if (total > tokens) {
-                removeLockedNodeBefore(to, p);
-                lockedlist[to].nodes[p].tokens = (total - tokens);
+            total += lockedlist[_contract].nodes[p].tokens;
+            if (total > _tokens) {
+                removeLockedNodeBefore(_contract, p);
+                lockedlist[_contract].nodes[p].tokens = (total - _tokens);
                 return true;
-            } else if(total == tokens) {
-                removeLockedNode(to, p);
+            } else if(total == _tokens) {
+                removeLockedNode(_contract, p);
                 return true;
             }
-            p = lockedlist[to].nodes[p].next;
+            p = lockedlist[_contract].nodes[p].next;
         }
         return false;
     }
