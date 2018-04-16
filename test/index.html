@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/web3.js"></script>
+    <script type="text/javascript" src="contracts/ERC20.js"></script>
+    <script type="text/javascript" src="contracts/Points.js"></script>
+    <script type="text/javascript" src="contracts/TripioToken.js"></script>
+    <script type="text/javascript" src="js/cases.js"></script>
+    <link href="css/cases.css?v=1" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="filter">
+        <span style="font: 14px;color: #fff;text-align: center; display: block; height: 30px; line-height: 30px;">Event</span>
+        <div id="filtercontent" class="filtercontent"></div>
+    </div>
+
+    <div style="text-align: center; font-size: 24pt;">合约测试</div>
+    <div class="odd">
+        <span class="tips">当前连接节点</span>
+        <span class="result" id="currentNetwork"></span>
+    </div>
+    <div class="even">
+        <span class="tips">获取当前区块数量</span>
+        <span class="result" id="blockNumber"></span>
+    </div>
+    <div class="odd">
+        <span class="tips">获取当前账户剩余ETH数量</span>
+        <span class="result" id="balance"></span>
+    </div>
+    <div class="even">
+        <span class="tips">获取指定账户剩余ETH数量</span>
+        <input id='balanceAccount' class="input" type="text" placeholder="账户">
+        <button class="confirm" onclick="getBalanceOf()">账户余额</button>
+        <span class="result" id="balanceOf"></span>
+    </div>
+    <div class="odd">
+        <span class="tips">转账给其他人</span>
+        <input id='transferTo' class="input" type="text" placeholder="目标账户">
+        <input id='transferValue' class="input" type="text" placeholder="转账金额">
+        <button class="confirm" onclick="transferTo()">转账</button>
+        <span id="transactionResponse" class="result"></span>
+    </div>
+    <div class="split"></div>
+    <div class="even">
+        <span style="text-align: center" class="tips">TRIO代币合约地址</span>
+        <span style="text-align: center" class="result">TRIO Contract: 0xD68C8a6Efec16180F4989DFB683d48Dfd2B0ED7d</span>
+    </div>
+    <div class="odd">
+        <span class="tips">获取TRIO代币数量(balanceOf)</span>
+        <button class="confirm" onclick="getTrioBalance()">代币数量</button>
+        <span id="trioBalance" class="result"></span>
+    </div>
+    <div class="even">
+        <span class="tips">开启/关闭TRIO转账(transferable)</span>
+        <span id="trioTransferable" class="result"></span>
+        <button class="confirm" onclick="trioEnableTransfer()">开启</button>
+        <button class="confirm" onclick="disableTransfer()">关闭</button>
+    </div>
+    <div class="odd">
+        <span class="tips">TRIO代币转账(transfer)</span>
+        <input id='trioTransferTo' class="input" type="text" placeholder="目标账户">
+        <input id='trioTransferValue' class="input" type="text" placeholder="转账金额">
+        <button class="confirm" onclick="trioTransferTo()">转账</button>
+        <span id="trioTransferResult" class="result"></span>
+    </div>
+    <div class="even">
+        <span class="tips">TRIO转账授权(approve)</span>
+        <input id='approveTo' class="input" type="text" placeholder="被授权账号">
+        <input id='approveValue' class="input" type="text" placeholder="授权金额">
+        <button class="confirm" onclick="trioApprove()">授权</button>
+        <span id="trioApproveResult" class="result"></span>
+    </div>
+    <div class="odd">
+        <span class="tips">TRIO代币代转账(transferFrom)</span>
+        <input id='trioTransfer2From' class="input" type="text" placeholder="来源账户">
+        <input id='trioTransfer2To' class="input" type="text" placeholder="目标账户">
+        <input id='trioTransfer2Value' class="input" type="text" placeholder="转账金额">
+        <button class="confirm" onclick="trioTransferFrom()">转账</button>
+        <span id="trioTransferFromResult" class="result"></span>
+    </div>
+    <div class="split"></div>
+    <div class="even">
+        <span style="text-align: center" class="tips">Points合约地址</span>
+        <span style="text-align: center" class="result">Points Contract: 0x4e4348052148b1e1724805ad04405e64b3619de5</span>
+    </div>
+    <div class="odd">
+        <span class="tips">我所有的积分合约(ownedContracts)</span>
+        <div id="mypointscontracts" class="result"></div>
+    </div>
+    <div class="even">
+        <span class="tips">合约内容(contracts)</span>
+        <input id='pointsContractAddress' class="input" type="text" placeholder="合约地址">
+        <button class="confirm" onclick="pointsContractInfo()">查询</button>
+        <div id="pointsContractInfo" class="result"></div>
+    </div>
+    <div class="odd">
+        <span class="tips">创建商户积分代币合约(createPointsContract)</span>
+        <input id='createPointsSymbol' class="input" type="text" placeholder="代币符号">
+        <input id='createPointsName' class="input" type="text" placeholder="代币名称">
+        <input id='createPointsDecimal' class="input" type="text" placeholder="代币小数位">
+        <input id='createPointsRate' class="input" type="text" placeholder="代币汇率">
+        <button class="confirm" onclick="createPoints()">创建</button>
+        <span id="createPointsResult" class="result"></span>
+    </div>
+    <div class="even">
+        <span class="tips">用TRIO兑换积分(exchange)</span>
+        <input id='exchangeAddress' class="input" type="text" placeholder="积分合约地址">
+        <input id='exchangeToken' class="input" type="text" placeholder="TRIO数量">
+        <input id='exchangeTime' class="input" type="text" placeholder="冻结时间">
+        <button class="confirm" onclick="exchange()">兑换</button>
+        <span id="exchangeResult" class="result"></span>
+    </div>
+    <div class="odd">
+        <span class="tips">查询某合约的未冻结积分(totalUnlockedTokens)</span>
+        <input id='unlockedContract' class="input" type="text" placeholder="积分合约地址">
+        <button class="confirm" onclick="totalUnlockedTokens()">查询</button>
+        <span id="totalUnlockedTokensResult" class="result"></span>
+    </div>
+    <div class="even">
+        <span class="tips">积分赎回(redeem)</span>
+        <input id='redeemContract' class="input" type="text" placeholder="积分合约地址">
+        <input id='redeemPoints' class="input" type="text" placeholder="积分数量">
+        <button class="confirm" onclick="redeem()">赎回</button>
+        <span id="redeemResult" class="result"></span>
+    </div>
+</body>
+
+</html>
