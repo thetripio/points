@@ -33,4 +33,11 @@ contract Creation {
     function assignOwner(address _owner) public onlyCreator {
         owner = _owner;
     }
+
+    /**
+     * Assign the creator
+     */
+    function assignCreator(address _creator) public onlyCreator {
+        creator = _creator;
+    }
 }
