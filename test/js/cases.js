@@ -55,8 +55,23 @@ function showNetwork() {
       } else {
         output = "Error";
       }
-      document.getElementById('currentNetwork').innerText = "Network = " + output;
-    })
+      document.getElementById('currentNetwork').innerHTML += "<div>Network: " + output + "</div>";
+    });
+
+    web3.version.getNode((error, result)=>{
+        document.getElementById('currentNetwork').innerHTML += "<div>Node: " + result + "</div>";
+    });
+
+    web3.eth.getHashrate((error, result)=>{
+        document.getElementById('currentNetwork').innerHTML += "<div>hashrate: " + result + "</div>";
+    });
+
+    web3.eth.getGasPrice((error, result)=>{
+        document.getElementById('currentNetwork').innerHTML += "<div>gasPrice: " + result.toString(10) + "</div>";
+    });
+
+    document.getElementById('currentNetwork').innerHTML += "<div>defaultBlock: " + web3.eth.defaultBlock + "</div>";
+    document.getElementById('currentNetwork').innerHTML += "<div>coinbase: " + web3.eth.coinbase + "</div>";
 }
 
 function filter(event) {
@@ -373,9 +388,28 @@ function myPointsContracts() {
     });
 }
 
-// {/* <input id='pointsContractAddress' class="input" type="text" placeholder="合约地址">
-//         <button class="confirm" onclick="pointsContractInfo()">查询</button>
-//         <div id="pointsContractInfo" class="result"></div> */}
+function getPointsBalance() {
+    document.getElementById("pointsBalance").innerText = "";
+    web3.eth.getAccounts(function(error0, accounts) {
+        if (!error0) {
+            var erc20 = document.getElementById('pointsERC20').value;
+            if(erc20.length != null && erc20.length) {
+                var fromAccount = accounts[0];
+                var erc20Contract = web3.eth.contract(erc20ABI);
+                var erc20ContractInstance = erc20Contract.at(erc20);
+                erc20ContractInstance.balanceOf(fromAccount, {from: fromAccount}, function(error, result) {
+                    if (error) {
+                        document.getElementById("pointsBalance").innerHTML = error;
+                    } else {
+                        document.getElementById("pointsBalance").innerHTML = result;
+                    }
+                });
+            }
+        }else {
+            document.getElementById("pointsBalance").innerHTML = error0;
+        }
+    });
+}
 
 function pointsContractInfo() {
     document.getElementById("pointsContractInfo").innerHTML = "";
@@ -448,13 +482,6 @@ function createPoints() {
 }
 
 function exchange() {
-    // <span class="tips">用TRIO兑换积分(exchange)</span>
-    //     <input id='exchangeAddress' class="input" type="text" placeholder="积分合约地址">
-    //     <input id='exchangeToken' class="input" type="text" placeholder="TRIO数量">
-    //     <input id='exchangeTime' class="input" type="text" placeholder="冻结时间">
-    //     <button class="confirm" onclick="exchange()">兑换</button>
-    //     <span id="exchangeResult" class="result"></span>
-
     document.getElementById("exchangeResult").innerText = "";
     web3.eth.getAccounts(function(error0, accounts) {
         if (!error0) {
@@ -509,12 +536,6 @@ function exchange() {
     });
 }
 
-
-// {/* <span class="tips">查询某合约的未冻结积分(totalUnlockedTokens)</span>
-//         <input id='unlockedContract' class="input" type="text" placeholder="积分合约地址">
-//         <button class="confirm" onclick="totalUnlockedTokens()">查询</button>
-//         <span id="totalUnlockedTokensResult" class="result"></span> */}
-
 function totalUnlockedTokens() {
     document.getElementById("totalUnlockedTokensResult").innerHTML = "";
     web3.eth.getAccounts(function(error0, accounts) {
@@ -536,12 +557,6 @@ function totalUnlockedTokens() {
         }
     });
 }
-
-
-// {/* <input id='redeemContract' class="input" type="text" placeholder="积分合约地址">
-//             <input id='redeemPoints' class="input" type="text" placeholder="积分数量">
-//             <button class="confirm" onclick="redeem()">查询</button>
-//             <span id="redeemResult" class="result"></span> */}
 
 function redeem() {
     document.getElementById("redeemResult").innerHTML = "";

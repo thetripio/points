@@ -91,12 +91,18 @@
         <div id="mypointscontracts" class="result"></div>
     </div>
     <div class="even">
+        <span class="tips">我的积分余额(balanceOf)</span>
+        <input id='pointsERC20' class="input" type="text" placeholder="积分合约地址">
+        <button class="confirm" onclick="getPointsBalance()">积分数量</button>
+        <span id="pointsBalance" class="result"></span>
+    </div>
+    <div class="odd">
         <span class="tips">合约内容(contracts)</span>
         <input id='pointsContractAddress' class="input" type="text" placeholder="合约地址">
         <button class="confirm" onclick="pointsContractInfo()">查询</button>
         <div id="pointsContractInfo" class="result"></div>
     </div>
-    <div class="odd">
+    <div class="even">
         <span class="tips">创建商户积分代币合约(createPointsContract)</span>
         <input id='createPointsSymbol' class="input" type="text" placeholder="代币符号">
         <input id='createPointsName' class="input" type="text" placeholder="代币名称">
@@ -105,7 +111,7 @@
         <button class="confirm" onclick="createPoints()">创建</button>
         <span id="createPointsResult" class="result"></span>
     </div>
-    <div class="even">
+    <div class="odd">
         <span class="tips">用TRIO兑换积分(exchange)</span>
         <input id='exchangeAddress' class="input" type="text" placeholder="积分合约地址">
         <input id='exchangeToken' class="input" type="text" placeholder="TRIO数量">
@@ -113,13 +119,13 @@
         <button class="confirm" onclick="exchange()">兑换</button>
         <span id="exchangeResult" class="result"></span>
     </div>
-    <div class="odd">
+    <div class="even">
         <span class="tips">查询某合约的未冻结积分(totalUnlockedTokens)</span>
         <input id='unlockedContract' class="input" type="text" placeholder="积分合约地址">
         <button class="confirm" onclick="totalUnlockedTokens()">查询</button>
         <span id="totalUnlockedTokensResult" class="result"></span>
     </div>
-    <div class="even">
+    <div class="odd">
         <span class="tips">积分赎回(redeem)</span>
         <input id='redeemContract' class="input" type="text" placeholder="积分合约地址">
         <input id='redeemPoints' class="input" type="text" placeholder="积分数量">
