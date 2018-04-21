@@ -20,10 +20,6 @@ var pointsABI = [
 				"type": "string"
 			},
 			{
-				"name": "_decimals",
-				"type": "uint256"
-			},
-			{
 				"name": "_rate",
 				"type": "uint256"
 			}
@@ -107,6 +103,23 @@ var pointsABI = [
 		"inputs": [
 			{
 				"indexed": true,
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "Withdraw",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"name": "ads",
 				"type": "address"
 			},
@@ -122,23 +135,6 @@ var pointsABI = [
 			}
 		],
 		"name": "Exchange",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "tokens",
-				"type": "uint256"
-			}
-		],
-		"name": "Withdraw",
 		"type": "event"
 	},
 	{
@@ -286,17 +282,6 @@ var pointsABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"name": "_tripioContract",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -319,6 +304,17 @@ var pointsABI = [
 		"payable": true,
 		"stateMutability": "payable",
 		"type": "fallback"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_tripioContract",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"constant": true,

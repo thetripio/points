@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <script type="text/javascript" src="js/web3.js"></script>
-    <script type="text/javascript" src="contracts/ERC20.js"></script>
+    <script type="text/javascript" src="contracts/MerchantPoints.js"></script>
     <script type="text/javascript" src="contracts/Points.js"></script>
     <script type="text/javascript" src="contracts/TripioToken.js"></script>
     <script type="text/javascript" src="js/cases.js"></script>
@@ -84,7 +84,7 @@
     <div class="split"></div>
     <div class="even">
         <span style="text-align: center" class="tips">Points合约地址</span>
-        <span style="text-align: center" class="result">Points Contract: 0x4e4348052148b1e1724805ad04405e64b3619de5</span>
+        <span style="text-align: center" class="result">Points Contract: 0x50c6ef98b596800c0c2712cf865eb6a85fab189f</span>
     </div>
     <div class="odd">
         <span class="tips">我所有的积分合约(ownedContracts)</span>
@@ -106,7 +106,6 @@
         <span class="tips">创建商户积分代币合约(createPointsContract)</span>
         <input id='createPointsSymbol' class="input" type="text" placeholder="代币符号">
         <input id='createPointsName' class="input" type="text" placeholder="代币名称">
-        <input id='createPointsDecimal' class="input" type="text" placeholder="代币小数位">
         <input id='createPointsRate' class="input" type="text" placeholder="代币汇率">
         <button class="confirm" onclick="createPoints()">创建</button>
         <span id="createPointsResult" class="result"></span>

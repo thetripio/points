@@ -1,4 +1,4 @@
-var erc20ABI = [
+var merchantPointsABI = [
 	{
 		"constant": true,
 		"inputs": [],

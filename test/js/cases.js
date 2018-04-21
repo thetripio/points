@@ -1,5 +1,5 @@
 var trioAddress = '0xD68C8a6Efec16180F4989DFB683d48Dfd2B0ED7d';
-var pointsAddress = '0x766d8203c9a8fdef8ab10627c63a52501f2c7ced';
+var pointsAddress = '0x50c6ef98b596800c0c2712cf865eb6a85fab189f';
 window.addEventListener("load", function() {
     var Web3 = require('web3');
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -395,7 +395,7 @@ function getPointsBalance() {
             var erc20 = document.getElementById('pointsERC20').value;
             if(erc20.length != null && erc20.length) {
                 var fromAccount = accounts[0];
-                var erc20Contract = web3.eth.contract(erc20ABI);
+                var erc20Contract = web3.eth.contract(merchantPointsABI);
                 var erc20ContractInstance = erc20Contract.at(erc20);
                 erc20ContractInstance.balanceOf(fromAccount, {from: fromAccount}, function(error, result) {
                     if (error) {
@@ -444,21 +444,18 @@ function createPoints() {
             var fromAccount = accounts[0];
             var symbol = document.getElementById('createPointsSymbol').value;
             var name = document.getElementById('createPointsName').value;
-            var decimal = document.getElementById('createPointsDecimal').value;
             var rate = document.getElementById('createPointsRate').value;
 
             if (symbol != null && 
                 symbol.length > 0 && 
                 name != null && 
                 name.length > 0 &&
-                decimal != null &&
-                decimal.length > 0 &&
                 rate != null &&
                 rate.length > 0) {
                     var pointsContract = web3.eth.contract(pointsABI);
                     var pointsContractInstance = pointsContract.at(pointsAddress);
 
-                    pointsContractInstance.createPointsContract(symbol, name, decimal, rate, {from: fromAccount}, function(error, result) {
+                    pointsContractInstance.createPointsContract(symbol, name, rate, {from: fromAccount}, function(error, result) {
                         if (error) {
                             document.getElementById("createPointsResult").innerText = error;
                         } else {
