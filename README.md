@@ -16,4 +16,5 @@ Before starting the test you need to hold a certain number of ETH and Tripio's d
 * Mail: [hi@trip.io](hi@trip.io)
 
 TRIO Contract [0xF142f1c7BaDc95FB438302D7Cf0a5Db426f8f779](https://ropsten.etherscan.io/address/0xF142f1c7BaDc95FB438302D7Cf0a5Db426f8f779)
+
 Point Contract [0xdc8A673234721116aD66621802698BD2B9d225F3](https://ropsten.etherscan.io/address/0xdc8A673234721116aD66621802698BD2B9d225F3)
