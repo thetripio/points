@@ -1,5 +1,5 @@
-var trioAddress = '0xD68C8a6Efec16180F4989DFB683d48Dfd2B0ED7d';
-var pointsAddress = '0x50c6ef98b596800c0c2712cf865eb6a85fab189f';
+var trioAddress = '0xF142f1c7BaDc95FB438302D7Cf0a5Db426f8f779';
+var pointsAddress = '0xdc8A673234721116aD66621802698BD2B9d225F3';
 window.addEventListener("load", function() {
     var Web3 = require('web3');
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -24,6 +24,7 @@ window.addEventListener("load", function() {
     myPointsContracts();
 
     trioTransferable();
+
 });
 
 
