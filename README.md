@@ -5,6 +5,10 @@ All content here is based on the **Ropsten** test network, please do not use you
 
 Tripio's points system is based on Tripio's Ethereum digital currency TRIO. Merchants can create their own point contracts and exchange a TRIO to hold a certain percentage of points. These points can be transferred within the merchant's own point contract and can be redeemed at any time as TRIO. Users who hold the points can transfer points and redeem as TRIO within the related points contract.
 
+# Demo
+
+http://my.trip.io/point-demo
+
 # Dependence
 Our system relies on MetaMask wallet environment, please select Chrome browser and install [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn) plugin!
 
